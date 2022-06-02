@@ -14,10 +14,9 @@ public class CameraLook : MonoBehaviour
     {
         if (_target != null)
         {
-            _offset = transform.position - _target.position;
+            _offset = transform.position;
         }
     }
-
 
     private void LateUpdate()
     {

@@ -8,11 +8,7 @@ public class PlayerController : MonoBehaviour
     public Rigidbody _rigidbody;
     public Vector3 _velocity;
 
-
-    //[SerializeField] private GameObject bulletSpawnPoint;
-    //[SerializeField] private float waitTime;
-    //[SerializeField] private GameObject bullet;
-    public Animator animator;
+    //public Animator animator;
 
 
     // Start is called before the first frame update
@@ -20,7 +16,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
-        animator = GetComponent<Animator>();
+        //animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -31,21 +27,18 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        animator.SetFloat("forward", Input.GetAxis("Vertical"));
-        animator.SetFloat("turn", Input.GetAxis("Horizontal"));
-
         //_rigidbody.MovePosition(_rigidbody.position + _velocity.normalized.magnitude * Time.fixedDeltaTime * _velocity.ToIso());
         _rigidbody.MovePosition(_rigidbody.position + _velocity.normalized.magnitude * Time.fixedDeltaTime * _velocity);
-        Move(_velocity);
-
+        //Move(_velocity);
     }
+
+   
 
     public void Move(Vector3 velocity)
     {
-        //_rb.MovePosition(transform.position + (transform.forward * _input.magnitude) * _speed * Time.deltaTime);
-        //_rb.MovePosition(transform.position + _input.ToIso() * _input.normalized.magnitude * _speed * Time.deltaTime);
         _velocity = velocity;
     }
+
 
     public void LookAt(Vector3 lookPoint)
     {
