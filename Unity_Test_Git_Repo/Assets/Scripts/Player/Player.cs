@@ -6,11 +6,14 @@ using UnityEngine;
 [RequireComponent(typeof(GunController))]
 public class Player : LivingEntity
 {
-    public float _moveSpeed = 5;
+    [SerializeField] private float _moveSpeed = 5;
+    [SerializeField] private LayerMask groundMask;
     Camera viewCamera;
 
-    [SerializeField] PlayerController controller;
-    [SerializeField] GunController gunController;
+    private PlayerController controller;
+    private GunController gunController;
+
+    [SerializeField] private Transform crossHair;
 
 
     // Start is called before the first frame update
@@ -32,20 +35,32 @@ public class Player : LivingEntity
 
         // Look input
         Ray ray = viewCamera.ScreenPointToRay(Input.mousePosition);
-        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+        Plane groundPlane = new Plane(Vector3.up, Vector3.up * gunController.GunHeight);
         float rayDistance;
 
         if (groundPlane.Raycast(ray, out rayDistance))
         {
             Vector3 point = ray.GetPoint(rayDistance);
             controller.LookAt(point);
-        }
+            crossHair.position = point;
 
+            if ((new Vector2(point.x, point.z) - new Vector2(transform.position.x, transform.position.z)).sqrMagnitude > 1)
+            {
+                gunController.Aim(point);
+
+            }
+        }
 
         // Weapon input
         if (Input.GetMouseButton(0))
         {
             gunController.Shoot();
         }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            gunController.Reload();
+        }
     }
+
+
 }

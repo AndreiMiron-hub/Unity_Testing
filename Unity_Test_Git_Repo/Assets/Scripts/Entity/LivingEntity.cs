@@ -8,10 +8,15 @@ public class LivingEntity : MonoBehaviour, IDamageable
     protected float _health;
     protected bool _dead;
 
+    protected Animator animator;
+    private Collider _collider;
+
     public event System.Action OnDeath;
 
     protected virtual void Start()
     {
+        animator = GetComponent<Animator>();
+        _collider = GetComponent<Collider>();
         _health = _startingHealth;
     }
     public virtual void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection)// folositoare pt a cunoaste unde a lovit 
@@ -31,12 +36,16 @@ public class LivingEntity : MonoBehaviour, IDamageable
     protected void Die()
     {
         _dead = true;
+        _collider.enabled = false;
         if (OnDeath != null)
         {
+            
             OnDeath();
         }
-        GameObject.Destroy(gameObject);
+        animator.SetTrigger("Die");
+        var destroyTime = 3f;
+        GameObject.Destroy(gameObject, destroyTime);
     }
 
-    
+
 }

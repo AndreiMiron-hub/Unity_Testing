@@ -12,7 +12,9 @@ public class PlayerController : MonoBehaviour
     //[SerializeField] private GameObject bulletSpawnPoint;
     //[SerializeField] private float waitTime;
     //[SerializeField] private GameObject bullet;
-    Animator animator;
+    public Animator animator;
+
+
     // Start is called before the first frame update
 
     private void Start()
@@ -24,15 +26,18 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        //GatherInput();
-        //Aim();
-        //Look();
+        
     }
 
     private void FixedUpdate()
     {
-        _rigidbody.MovePosition(_rigidbody.position + _velocity.normalized.magnitude * Time.fixedDeltaTime * _velocity.ToIso());
+        animator.SetFloat("forward", Input.GetAxis("Vertical"));
+        animator.SetFloat("turn", Input.GetAxis("Horizontal"));
+
+        //_rigidbody.MovePosition(_rigidbody.position + _velocity.normalized.magnitude * Time.fixedDeltaTime * _velocity.ToIso());
+        _rigidbody.MovePosition(_rigidbody.position + _velocity.normalized.magnitude * Time.fixedDeltaTime * _velocity);
         Move(_velocity);
+
     }
 
     public void Move(Vector3 velocity)

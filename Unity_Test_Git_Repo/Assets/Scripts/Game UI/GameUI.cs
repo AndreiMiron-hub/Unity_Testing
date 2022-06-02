@@ -9,10 +9,57 @@ public class GameUI : MonoBehaviour
     public Image fadePlane;
     public GameObject gameOverUI;
 
+    public RectTransform newWaveBanner;
+    public Text newWaveTitle;
+    public Text nextWaveEnemyCount;
+
+    private Spawner spawner;
+
     // Start is called before the first frame update
     void Start()
     {
         FindObjectOfType<Player>().OnDeath += OnGameOver;
+    }
+
+    private void Awake()
+    {
+        spawner = FindObjectOfType<Spawner>();
+        spawner.OnNewWave += OnNewWave;
+    }
+
+    private void OnNewWave(int waveNumber)
+    {
+        newWaveTitle.text = $"Wave {waveNumber}";
+        nextWaveEnemyCount.text = $"Enemies: {spawner.waves[waveNumber - 1].enemyCount + 1}";
+
+        StartCoroutine(AnimateNewWaveBanner());
+    }
+
+    IEnumerator AnimateNewWaveBanner()
+    {
+        float speed = 2.5f;
+        float delayTime = 2f; // cat timp sta bannerul pe ecran
+        float animationPercent = 0;
+        int direction = 1;
+        float endDelayTime = Time.time + 1/speed + delayTime;
+
+        while (animationPercent >= 0)
+        {
+            animationPercent += Time.deltaTime * speed * direction;
+
+            if (animationPercent >= 1)
+            {
+                animationPercent = 1;
+
+                if (Time.time > endDelayTime)
+                {
+                    direction = -1;
+                }
+            }
+
+            newWaveBanner.anchoredPosition = Vector2.up * Mathf.Lerp(400, 218, animationPercent);
+            yield return null;
+        }
     }
 
     void OnGameOver()

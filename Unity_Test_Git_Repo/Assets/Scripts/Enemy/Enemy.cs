@@ -12,6 +12,8 @@ public class Enemy : LivingEntity
     NavMeshAgent pathfinder;
     Transform target;
     LivingEntity targetEntity;
+
+    // This enemy particle
     public ParticleSystem deathEffect;
     public ParticleSystem hitEffect;
 
@@ -25,34 +27,45 @@ public class Enemy : LivingEntity
 
     bool hasTarget;
 
-    // Start is called before the first frame update
-    protected override void Start()
+    private void Awake()
     {
-        base.Start();
         pathfinder = GetComponent<NavMeshAgent>();
 
         if (GameObject.FindGameObjectWithTag("Player") != null)
         {
-            currentState = State.Chasing;
             hasTarget = true;
 
             target = GameObject.FindGameObjectWithTag("Player").transform;
             targetEntity = target.GetComponent<LivingEntity>();
-            targetEntity.OnDeath += OnTargetDeath;
-
 
             attackerCollisionRadius = GetComponent<CapsuleCollider>().radius;
             targetCollisionRadius = target.GetComponent<CapsuleCollider>().radius;
+        }
+    }
 
+
+    // Start is called before the first frame update
+    protected override void Start()
+    {
+        base.Start();
+        //animator = GetComponent<Animator>();
+
+        if (hasTarget)
+        {
+            currentState = State.Chasing;
+            Chasing();
+            targetEntity.OnDeath += OnTargetDeath;
             StartCoroutine(UpdatePath());
         }
-        
+        else
+            Idle();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (hasTarget)
+        if (hasTarget && !_dead)
         {
             if (Time.time > nextAtackTime)
             {
@@ -68,16 +81,32 @@ public class Enemy : LivingEntity
         
     }
 
+    
+    public void SetCharacteristics(float moveSpeed, int hitsToKillPlayer, float enemyHealth)
+    {
+        pathfinder.speed = moveSpeed;
+
+        if (hasTarget)
+        {
+            damage = Mathf.Ceil(targetEntity._startingHealth / hitsToKillPlayer);
+        }
+        _startingHealth = enemyHealth;
+        // mai pot face cod
+    }
     public override void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection)
     {
-        if (damage >= _health)
+        if (!_dead)
         {
-            Destroy(Instantiate(deathEffect.gameObject, hitPoint, Quaternion.FromToRotation(Vector3.forward, hitDirection)) as GameObject, deathEffect.main.startLifetime.constant);
+            if (damage >= _health)
+            {
+                Destroy(Instantiate(deathEffect.gameObject, hitPoint, Quaternion.FromToRotation(Vector3.forward, hitDirection)) as GameObject, deathEffect.main.startLifetime.constant);
+            }
+            else
+            {
+                Destroy(Instantiate(hitEffect.gameObject, hitPoint, Quaternion.FromToRotation(Vector3.forward, hitDirection)) as GameObject, deathEffect.main.startLifetime.constant);
+            }
         }
-        else
-        {
-            Destroy(Instantiate(hitEffect.gameObject, hitPoint, Quaternion.FromToRotation(Vector3.forward, hitDirection)) as GameObject, deathEffect.main.startLifetime.constant);
-        }
+        
         base.TakeHit(damage, hitPoint, hitDirection);
     }
     void OnTargetDeath()
@@ -85,7 +114,6 @@ public class Enemy : LivingEntity
         hasTarget = false;
         currentState = State.Idle;
     }
-
 
     IEnumerator Attack()
     {
@@ -95,7 +123,7 @@ public class Enemy : LivingEntity
         Vector3 originalPosition = transform.position;
         Vector3 directionToTarget = (target.position - transform.position).normalized;
         Vector3 attackPosition = target.position - directionToTarget * (attackerCollisionRadius + targetCollisionRadius);
-
+        Atack();
 
         float percent = 0; // value 0 to 1
         float attackSpeed = 3;
@@ -135,9 +163,42 @@ public class Enemy : LivingEntity
                 {
                     pathfinder.SetDestination(targetPosition);
                 }
+                else if (_dead)
+                {
+                    pathfinder.isStopped = true;
+                }
             }
-            
             yield return new WaitForSeconds(refreshRate);
         }
     }
+
+
+    #region Animations
+
+    private void Idle()
+    {
+        if (animator != null)
+        {
+            animator.SetFloat("Speed", 0);
+        }
+    }
+
+    private void Chasing()
+    {
+        if (animator != null)
+        {
+            animator.SetFloat("Speed", 0.5f);
+        }
+        
+    }
+
+    private void Atack()
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger("Attack");
+        }
+    }
+
+    #endregion
 }

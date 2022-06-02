@@ -8,19 +8,20 @@ public class Projectile : MonoBehaviour
     [SerializeField] float _speed = 10;
     [SerializeField] float _damage = 1;
     [SerializeField] float _lifeTime = 1.5f;
-    [SerializeField] float _hitBox = .1f;
+    [SerializeField] float _hitBox = .01f;
+    [SerializeField] Color trailColor;
 
 
     private void Start()
     {
         Destroy(gameObject, _lifeTime);
 
-        Collider[] initialCollisions = Physics.OverlapSphere(transform.position, .1f, collisionMask);
+        Collider[] initialCollisions = Physics.OverlapSphere(transform.position, .01f, collisionMask);
         if (initialCollisions.Length > 0)
         {
             OnHitObject(initialCollisions[0], transform.position);
-            Destroy(gameObject);
         }
+        GetComponent<TrailRenderer>().material.SetColor("_TintColor", trailColor);
     }
 
     public void SetSpeed(float newSpeed)
@@ -54,7 +55,7 @@ public class Projectile : MonoBehaviour
         if (damageableObject != null)
         {
             damageableObject.TakeHit(_damage, hitPoint, transform.forward);
-            Destroy(gameObject);
         }
+        GameObject.Destroy(gameObject);
     }
 }
