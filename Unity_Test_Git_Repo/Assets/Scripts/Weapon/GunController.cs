@@ -64,7 +64,7 @@ public class GunController : MonoBehaviour
     }
 
 
-        public void Shoot()
+    public void Shoot()
     {
         if(equippedGun != null)
         {

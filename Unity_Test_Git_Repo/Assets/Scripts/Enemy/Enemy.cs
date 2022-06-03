@@ -67,7 +67,7 @@ public class Enemy : LivingEntity
     {
         if (hasTarget && !_dead)
         {
-            if (Time.time > nextAtackTime)
+            if (Time.time > nextAtackTime && target != null)
             {
                 float sqrtDistanceToTarget = (target.position - transform.position).sqrMagnitude;
 
@@ -86,7 +86,7 @@ public class Enemy : LivingEntity
     {
         pathfinder.speed = moveSpeed;
 
-        if (hasTarget)
+        if (hasTarget && !_dead)
         {
             damage = Mathf.Ceil(targetEntity._startingHealth / hitsToKillPlayer);
         }

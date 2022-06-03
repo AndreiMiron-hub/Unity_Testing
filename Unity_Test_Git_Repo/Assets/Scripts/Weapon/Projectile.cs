@@ -14,12 +14,11 @@ public class Projectile : MonoBehaviour
     private void Start()
     {
         Destroy(gameObject, _lifeTime);
-
-        Collider[] initialCollisions = Physics.OverlapSphere(transform.position, _hitBox, collisionMask);
-        if (initialCollisions.Length > 0)
-        {
-            OnHitObject(initialCollisions[0], transform.position);
-        }
+        //Collider[] initialCollisions = Physics.OverlapSphere(transform.position, _hitBox, collisionMask);
+        //if (initialCollisions.Length > 0)
+        //{
+        //    OnHitObject(initialCollisions[0], transform.position);
+        //}
         GetComponent<TrailRenderer>().material.SetColor("_TintColor", trailColor);
     }
 

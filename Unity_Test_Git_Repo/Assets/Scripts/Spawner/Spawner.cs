@@ -53,12 +53,10 @@ public class Spawner : MonoBehaviour
             }
         }
         
-
         if (developerMode)
         {
             if (Input.GetKeyDown(KeyCode.V))
             {
-
                 StopCoroutine("SpawnEnemy");
                 StopCoroutine("SpawnBoss");
                 foreach (Enemy item in FindObjectsOfType<Enemy>())
@@ -83,12 +81,14 @@ public class Spawner : MonoBehaviour
             spawnTimer += Time.deltaTime;
             yield return null;
         }
-
-        Enemy spawnedEnemy = Instantiate(currentWave.smallEnemy, randomTile.position + Vector3.up, Quaternion.identity) as Enemy;
-        if (spawnedEnemy != null)
+        if (!isDisabled)
         {
-            spawnedEnemy.SetCharacteristics(currentWave.moveSpeed, currentWave.hitsToKillPlayer, currentWave.enemyHealth);
-            spawnedEnemy.OnDeath += OnEnemyDeath;
+            Enemy spawnedEnemy = Instantiate(currentWave.smallEnemy, randomTile.position + Vector3.up, Quaternion.identity) as Enemy;
+            if (spawnedEnemy != null)
+            {
+                spawnedEnemy.SetCharacteristics(currentWave.moveSpeed, currentWave.hitsToKillPlayer, currentWave.enemyHealth);
+                spawnedEnemy.OnDeath += OnEnemyDeath;
+            }
         }
     }
 
@@ -108,6 +108,7 @@ public class Spawner : MonoBehaviour
     {
         isDisabled = true;
     }
+
     private void OnEnemyDeath()
     {
         enemiesRemainingAlive--;
@@ -125,7 +126,7 @@ public class Spawner : MonoBehaviour
 
     private void ResetPlayerPosition()
     {
-        playerTransform.position = map.GetTileFromPosition(Vector3.zero).position + Vector3.up;
+        playerTransform.position = map.GetTileFromPosition(Vector3.zero).position;
     }
     private void NextWave()
     {
@@ -150,7 +151,6 @@ public class Spawner : MonoBehaviour
 
         NextWave();
     }
-
 
 
     [System.Serializable]
