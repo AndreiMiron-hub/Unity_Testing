@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class MuzzleFlash : MonoBehaviour
 {
-    public GameObject flashHolder;
+    public GameObject[] flashHolders;
     public Sprite[] flashSprites;
     public SpriteRenderer[] spriteRenderers;
     public float flashTime;
-
 
     private void Start()
     {
@@ -17,19 +16,28 @@ public class MuzzleFlash : MonoBehaviour
 
     public void Activate()
     {
-        flashHolder.SetActive(true);
-
-        int flashSpriteIndex = Random.Range(0, flashSprites.Length);
-        for (int i = 0; i < spriteRenderers.Length; i++)
+        for (int i = 0; i < flashHolders.Length; i++)
         {
-            spriteRenderers[i].sprite = flashSprites[flashSpriteIndex];
-        }
+            flashHolders[i].SetActive(true);
 
-        Invoke("Deactivate", flashTime);
+            int flashSpriteIndex = Random.Range(0, flashSprites.Length);
+
+            for (int j = 0; j < spriteRenderers.Length; j++)
+            {
+                spriteRenderers[j].sprite = flashSprites[flashSpriteIndex];
+            }
+
+            Invoke("Deactivate", flashTime);
+        }
+        
     }
 
     private void Deactivate()
     {
-        flashHolder.SetActive(false);
+
+        for (int i = 0; i < flashHolders.Length; i++)
+        {
+            flashHolders[i].SetActive(false);
+        }
     }
 }

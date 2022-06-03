@@ -5,15 +5,19 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
+    public enum FireMode { Auto, Burst, Single };
+    public FireMode fireMode;
+
     [SerializeField] private int projectilePerMag;
     [SerializeField] private float reloadTime = .3f;
 
     [Header("Effects")]
-    [SerializeField] private Transform muzzle;
+    [SerializeField] private Transform[] projectileSpawn; // de unde se spawneaza proiectilele
     [SerializeField] private Projectile projectile;
     [SerializeField] private float timeBetweenShots = 100; // in milisecunde
     [SerializeField] private float muzzleVelocity = 30;
     [SerializeField] private float nextShotTime = 1;
+    [SerializeField] private int burstCount = 1;
 
     [Header("Recoil")]
     [SerializeField] private Vector2 kickMinMax = new Vector2(.05f, .2f);
@@ -21,22 +25,23 @@ public class Gun : MonoBehaviour
     [SerializeField] private float recoilMoveSettleTime = .1f;
     [SerializeField] private float recoilRotationSettleTime = .1f;
 
-
     public Transform shell;
     public Transform shellEjection;
     private Vector3 recoilSmoothDampVelocity;
     private float recoilAngle;
     private float recoilRotSmoothDampVelocity;
-    private bool isReloading;
 
-    int projectileRemainingInMag;
-
+    int projectilesRemainingInMag;
+    bool triggerReleasedSinceLastShot;
+    bool isReloading;
+    int shotsRemainingInBurst;
 
     MuzzleFlash muzzleFlash;
     private void Start()
     {
         muzzleFlash = GetComponent<MuzzleFlash>();
-        projectileRemainingInMag = projectilePerMag;
+        shotsRemainingInBurst = burstCount;
+        projectilesRemainingInMag = projectilePerMag;
     }
 
     private void LateUpdate()
@@ -47,7 +52,7 @@ public class Gun : MonoBehaviour
         //recoilAngle = Mathf.SmoothDamp(recoilAngle, 0, ref recoilRotSmoothDampVelocity, recoilRotationSettleTime);
         //transform.localEulerAngles = transform.localEulerAngles + Vector3.left * recoilAngle;
 
-        if (!isReloading && projectileRemainingInMag == 0)
+        if (!isReloading && projectilesRemainingInMag == 0)
         {
             Reload();
         }
@@ -55,28 +60,52 @@ public class Gun : MonoBehaviour
 
     public void Shoot()
     {
-        if(!isReloading && Time.time > nextShotTime && projectileRemainingInMag > 0)
+        if(!isReloading && Time.time > nextShotTime && projectilesRemainingInMag > 0)
         {
-            if (projectileRemainingInMag == 0)
-            {
-                return;
-            }
-            projectileRemainingInMag--;
-            nextShotTime = Time.time + timeBetweenShots / 1000;
-            Projectile newProjectile = Instantiate(projectile, muzzle.position, muzzle.rotation) as Projectile; 
-            newProjectile.SetSpeed(muzzleVelocity);
 
+            switch (fireMode)
+            {
+                case FireMode.Burst:
+                    if (shotsRemainingInBurst == 0)
+                    {
+                        return;
+                    }
+                    shotsRemainingInBurst--;
+                    break;
+                case FireMode.Single:
+                    if (!triggerReleasedSinceLastShot)
+                    {
+                        return;
+                    }
+                    break;
+                default:
+
+                    break;
+            }
+            for (int i = 0; i < projectileSpawn.Length; i++)
+            {
+                if (projectilesRemainingInMag == 0)
+                {
+                    break;
+                }
+                projectilesRemainingInMag--;
+                nextShotTime = Time.time + timeBetweenShots / 1000;
+                Projectile newProjectile = Instantiate(projectile, projectileSpawn[i].position, projectileSpawn[i].rotation) as Projectile;
+                newProjectile.SetSpeed(muzzleVelocity);
+            }
             Instantiate(shell, shellEjection.position, shellEjection.rotation);
             muzzleFlash.Activate();
+
             transform.localPosition -= Vector3.forward * Random.Range(kickMinMax.x, kickMinMax.y);
             recoilAngle += Random.Range(recoilAngleMinMax.x, recoilAngleMinMax.y);
             recoilAngle = Mathf.Clamp(recoilAngle, 0, 30);
+
         }
     }
 
     public void Reload()
     {
-        if (!isReloading &&  projectileRemainingInMag != projectilePerMag)
+        if (!isReloading &&  projectilesRemainingInMag != projectilePerMag)
         {
             StartCoroutine(AnimteReload());
         }
@@ -104,7 +133,7 @@ public class Gun : MonoBehaviour
 
 
         isReloading = false;
-        projectileRemainingInMag = projectilePerMag;
+        projectilesRemainingInMag = projectilePerMag;
     }
 
 
@@ -114,6 +143,17 @@ public class Gun : MonoBehaviour
         {
             transform.LookAt(aimPoint);
         }
+    }
+    public void OnTriggerHold()
+    {
+        Shoot();
+        triggerReleasedSinceLastShot = false;
+    }
+
+    public void OnTriggerRelease()
+    {
+        triggerReleasedSinceLastShot = true;
+        shotsRemainingInBurst = burstCount;
     }
 
 

@@ -8,15 +8,14 @@ public class Projectile : MonoBehaviour
     [SerializeField] float _speed = 10;
     [SerializeField] float _damage = 1;
     [SerializeField] float _lifeTime = 1.5f;
-    [SerializeField] float _hitBox = .01f;
+    [SerializeField] float _hitBox = .001f;
     [SerializeField] Color trailColor;
-
 
     private void Start()
     {
         Destroy(gameObject, _lifeTime);
 
-        Collider[] initialCollisions = Physics.OverlapSphere(transform.position, .01f, collisionMask);
+        Collider[] initialCollisions = Physics.OverlapSphere(transform.position, _hitBox, collisionMask);
         if (initialCollisions.Length > 0)
         {
             OnHitObject(initialCollisions[0], transform.position);
@@ -42,7 +41,7 @@ public class Projectile : MonoBehaviour
         Ray ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, moveDistance + _hitBox, collisionMask, QueryTriggerInteraction.Collide))
+        if (Physics.Raycast(ray, out hit, moveDistance, collisionMask, QueryTriggerInteraction.Collide))
         {
             OnHitObject(hit.collider, hit.point);
         }

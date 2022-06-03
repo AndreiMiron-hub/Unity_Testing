@@ -61,12 +61,32 @@ public class Player : LivingEntity
         // Weapon input
         if (Input.GetMouseButton(0))
         {
-            gunController.Shoot();
+            gunController.OnTriggerHold();
         }
+        if (Input.GetMouseButtonUp(0))
+        {
+            gunController.OnTriggerRelease();
+        }
+
+
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             gunController.Reload();
         }
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            gunController.EquipGun(0);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            gunController.EquipGun(1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            gunController.EquipGun(2);
+        }
+
     }
 
     private void FixedUpdate()
