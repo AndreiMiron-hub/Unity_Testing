@@ -13,18 +13,32 @@ public class GameUI : MonoBehaviour
     public Text newWaveTitle;
     public Text nextWaveEnemyCount;
 
+    [Header("Health bar")]
+    public RectTransform healthBar;
+
     private Spawner spawner;
+    private Player player;
 
     // Start is called before the first frame update
     void Start()
     {
-        FindObjectOfType<Player>().OnDeath += OnGameOver;
+        player = FindObjectOfType<Player>();
+        player.OnDeath += OnGameOver;
     }
 
     private void Awake()
     {
         spawner = FindObjectOfType<Spawner>();
         spawner.OnNewWave += OnNewWave;
+    }
+    private void Update()
+    {
+        float healthPercent = 0;
+        if (player != null)
+        {
+            healthPercent = player._health / player._startingHealth;
+        }
+        healthBar.localScale = new Vector3(healthPercent, 1, 1);
     }
 
     private void OnNewWave(int waveNumber)
@@ -65,6 +79,7 @@ public class GameUI : MonoBehaviour
     void OnGameOver()
     {
         StartCoroutine(Fade(Color.clear, Color.black, 1));
+        Cursor.visible = true;
         gameOverUI.SetActive(true);
     }
 

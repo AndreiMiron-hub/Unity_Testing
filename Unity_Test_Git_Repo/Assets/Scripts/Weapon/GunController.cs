@@ -7,30 +7,62 @@ public class GunController : MonoBehaviour
 
     [SerializeField] private Transform weaponHold;
     [SerializeField] private Gun startingGun;
+    [SerializeField] private Gun[] playerWeapons;
 
     Gun equippedGun;
+    int equippedGunIndex;
     public float GunHeight
     {
         get { return weaponHold.position.y; }
     }
     private void Start()
     {
-        if (startingGun != null)
+        if (playerWeapons.Length > 0 )
         {
-            EquipGun(startingGun);
+            EquipGun(playerWeapons[0]);
+            equippedGunIndex = 0;
         }
+    }
+
+    public void EquipGun(int weaponIndex)
+    {
+        if (equippedGunIndex == weaponIndex)
+        {
+            return;
+        }
+        equippedGunIndex = weaponIndex;
+        EquipGun(playerWeapons[weaponIndex]);
     }
 
     private void EquipGun(Gun gunToEquip)
     {
         if(equippedGun != null)
         {
-            Destroy(equippedGun);
+            Destroy(equippedGun.gameObject);
         }
-
-        equippedGun = Instantiate(gunToEquip, weaponHold.position, weaponHold.rotation) as Gun;
-        equippedGun.transform.parent = weaponHold;
+        if (gunToEquip != equippedGun)
+        {
+            equippedGun = Instantiate(gunToEquip, weaponHold.position, weaponHold.rotation) as Gun;
+            equippedGun.transform.parent = weaponHold;
+        }
     }
+
+    public void OnTriggerHold()
+    {
+        if (equippedGun != null)
+        {
+            equippedGun.OnTriggerHold();
+        }
+    }
+
+    public void OnTriggerRelease()
+    {
+        if (equippedGun != null)
+        {
+            equippedGun.OnTriggerRelease();
+        }
+    }
+
 
     public void Shoot()
     {

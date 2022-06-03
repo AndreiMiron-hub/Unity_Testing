@@ -5,7 +5,7 @@ using UnityEngine;
 public class LivingEntity : MonoBehaviour, IDamageable
 {
     public float _startingHealth;
-    protected float _health;
+    public float _health { get; protected set; }
     protected bool _dead;
 
     protected Animator animator;
@@ -39,7 +39,6 @@ public class LivingEntity : MonoBehaviour, IDamageable
         _collider.enabled = false;
         if (OnDeath != null)
         {
-            
             OnDeath();
         }
         animator.SetTrigger("Die");

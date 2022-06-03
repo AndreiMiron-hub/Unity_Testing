@@ -9,17 +9,12 @@ public class PlayerController : MonoBehaviour
     public Vector3 _velocity;
 
     //public Animator animator;
-
-
-    // Start is called before the first frame update
-
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
         //animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
     private void Update()
     {
         
@@ -31,8 +26,6 @@ public class PlayerController : MonoBehaviour
         _rigidbody.MovePosition(_rigidbody.position + _velocity.normalized.magnitude * Time.fixedDeltaTime * _velocity);
         //Move(_velocity);
     }
-
-   
 
     public void Move(Vector3 velocity)
     {
