@@ -610,6 +610,14 @@ PrefabInstance:
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6625029071223450350, guid: 0ec08dd3354caf5448864814945815f3, type: 3}
+      propertyPath: shootAudio
+      value: 
+      objectReference: {fileID: 8300000, guid: 58fda6cffff0fdc4f8caf5e9d14e53f3, type: 3}
+    - target: {fileID: 6625029071223450350, guid: 0ec08dd3354caf5448864814945815f3, type: 3}
+      propertyPath: reloadAudio
+      value: 
+      objectReference: {fileID: 8300000, guid: 47f004acda0088249aa2221564fe1572, type: 3}
+    - target: {fileID: 6625029071223450350, guid: 0ec08dd3354caf5448864814945815f3, type: 3}
       propertyPath: nextShotTime
       value: 1
       objectReference: {fileID: 0}

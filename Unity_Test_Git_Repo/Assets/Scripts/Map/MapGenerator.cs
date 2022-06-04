@@ -9,7 +9,7 @@ public class MapGenerator : MonoBehaviour
     public int mapIndex;
 
     public Transform tilePrefab;
-    public Transform obstaclePrefab;
+    public Transform[] obstaclePrefab;
     public Transform mapFloor;
     public Transform navmeshFloor;
     public Transform navmeshMaskPrefab;
@@ -23,6 +23,8 @@ public class MapGenerator : MonoBehaviour
     Queue<Coord> shuffledTileCoords;
     Queue<Coord> shuffledOpenTileCoords;
     Transform[,] tileMap;
+
+
 
     Map currentMap;
 
@@ -72,7 +74,7 @@ public class MapGenerator : MonoBehaviour
         }
 
         // Generating Obstacles
-
+        
         bool[,] obstacleMap = new bool[(int)currentMap.mapSize.x, (int)currentMap.mapSize.y];
         int obstacleCount = (int)(currentMap.mapSize.x * currentMap.mapSize.y * currentMap.obstaclePercent);
         int currentObstacleCount = 0;
@@ -90,24 +92,31 @@ public class MapGenerator : MonoBehaviour
                 float obstacleHeight = Mathf.Lerp(currentMap.minObstacleHeight, currentMap.maxObstacleHeight, (float)prng.NextDouble());
 
                 Vector3 obastaclePosition = CoordToPosition(randomCoord.x, randomCoord.y);
-                Transform newObstacle = Instantiate(obstaclePrefab, obastaclePosition + Vector3.up * obstacleHeight/2, Quaternion.identity) as Transform;
+
+                
+                Transform newObstacle = Instantiate(obstaclePrefab[Random.Range(0, obstaclePrefab.Length)], obastaclePosition + Vector3.up * obstacleHeight / 100, Quaternion.identity) as Transform;
+
                 newObstacle.parent = mapHolder;
                 newObstacle.localScale = new Vector3((1 - outlinePercent) * tileSize, obstacleHeight, (1 - outlinePercent) * tileSize);
 
                 Renderer obstacleRenderer = newObstacle.GetComponent<Renderer>();
                 Material obstacleMaterial = new Material(obstacleRenderer.sharedMaterial);
-                float colorPercent = randomCoord.y / (float)currentMap.mapSize.y;
-                obstacleMaterial.color = Color.Lerp(currentMap.foregroundColor,currentMap.backgroundColor, colorPercent);
+                
                 obstacleRenderer.sharedMaterial = obstacleMaterial;
                 allOpenCoords.Remove(randomCoord);
+                
+
             }
             else
-            {
-                obstacleMap[randomCoord.x, randomCoord.y] = false;
-                currentObstacleCount--;
-            }
+        {
+            obstacleMap[randomCoord.x, randomCoord.y] = false;
+            currentObstacleCount--;
         }
+    }
         shuffledOpenTileCoords = new Queue<Coord>(Utility.ShuffleArray(allOpenCoords.ToArray(), currentMap.seed));
+
+
+       
 
         // Creating the navmesh mask
         Transform maskLeft = Instantiate(navmeshMaskPrefab, Vector3.left * (currentMap.mapSize.x + maxMapSize.x) / 4f * tileSize, Quaternion.identity) as Transform;
@@ -248,8 +257,10 @@ public class MapGenerator : MonoBehaviour
     public class Map
     {
         public Coord mapSize;
+
         [Range(0,1)]
         public float obstaclePercent;
+
         public int seed;
         public float minObstacleHeight;
         public float maxObstacleHeight;
@@ -262,4 +273,36 @@ public class MapGenerator : MonoBehaviour
         }
 
     }
+
+
+
+
+    ///////////////////////////////////////////////////
+    [System.Serializable]
+    public class Element
+    {
+        public string name;
+
+        [Range(1, 10)]
+        public int density;
+        public GameObject[] prefabs;
+
+        public bool CanPlace()
+        {
+            if (Random.Range(0, 10) < density)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public GameObject GetRandom()
+        {
+            return prefabs[Random.Range(0, prefabs.Length)];
+        }
+    }
+    ///////////////////////////////////////////////////
 }
