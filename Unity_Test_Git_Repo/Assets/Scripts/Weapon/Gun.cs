@@ -18,6 +18,8 @@ public class Gun : MonoBehaviour
     [SerializeField] private float muzzleVelocity = 30;
     [SerializeField] private float nextShotTime = 1;
     [SerializeField] private int burstCount = 1;
+    public AudioClip shootAudio;
+    public AudioClip reloadAudio;
 
     [Header("Recoil")]
     [SerializeField] private Vector2 kickMinMax = new Vector2(.05f, .2f);
@@ -100,6 +102,8 @@ public class Gun : MonoBehaviour
             recoilAngle += Random.Range(recoilAngleMinMax.x, recoilAngleMinMax.y);
             recoilAngle = Mathf.Clamp(recoilAngle, 0, 30);
 
+            AudioManager.instance.PlaySound(shootAudio, transform.position);
+
         }
     }
 
@@ -108,6 +112,7 @@ public class Gun : MonoBehaviour
         if (!isReloading &&  projectilesRemainingInMag != projectilePerMag)
         {
             StartCoroutine(AnimteReload());
+            AudioManager.instance.PlaySound(reloadAudio, transform.position);
         }
     }
 

@@ -111,6 +111,14 @@ PrefabInstance:
       value: 0.199
       objectReference: {fileID: 0}
     - target: {fileID: 2424367812438832675, guid: 1e064e7941dd1ab4980f3ff177c5d831, type: 3}
+      propertyPath: shootAudio
+      value: 
+      objectReference: {fileID: 8300000, guid: 0112e0770d00bf2409305e8d1bad8ca8, type: 3}
+    - target: {fileID: 2424367812438832675, guid: 1e064e7941dd1ab4980f3ff177c5d831, type: 3}
+      propertyPath: reloadAudio
+      value: 
+      objectReference: {fileID: 8300000, guid: 0d21da3ef376ffc4392c23f22c74da19, type: 3}
+    - target: {fileID: 2424367812438832675, guid: 1e064e7941dd1ab4980f3ff177c5d831, type: 3}
       propertyPath: projectileSpawn.Array.size
       value: 1
       objectReference: {fileID: 0}
