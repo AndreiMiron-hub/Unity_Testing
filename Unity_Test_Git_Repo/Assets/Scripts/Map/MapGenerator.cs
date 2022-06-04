@@ -81,9 +81,34 @@ public class MapGenerator : MonoBehaviour
         List<Coord> allOpenCoords = new List<Coord>(allTileCoords);
 
 
+        int[] dLinie = new int[] {-2, -1, 0, 1, 2 };
+        int[] dColoana = new int[] {-2, -1, 0, 1, 2 };
+
         for (int i = 0; i < obstacleCount; i++)
         {
             Coord randomCoord = GetRandomCoord();
+
+            bool hasNeighbourElement = false;
+
+            for (int j = 0; j < dLinie.Length; j++)
+            {
+                for (int k = 0; k < dColoana.Length; k++)
+                {
+                    int neighbourIndexX = randomCoord.x + dLinie[j];
+                    int neighbourIndexY = randomCoord.y + dColoana[k];
+
+                    if (neighbourIndexX >= 0 && neighbourIndexX < obstacleMap.GetLength(0) && neighbourIndexY >= 0 && neighbourIndexY < obstacleMap.GetLength(1) && obstacleMap[neighbourIndexX, neighbourIndexY] == true)
+                    {
+                        hasNeighbourElement = true;
+                    }
+                }
+                
+            }
+            if (hasNeighbourElement == true)
+            {
+                continue;
+            }
+
             obstacleMap[randomCoord.x, randomCoord.y] = true;
             currentObstacleCount++;
 
@@ -93,7 +118,6 @@ public class MapGenerator : MonoBehaviour
 
                 Vector3 obastaclePosition = CoordToPosition(randomCoord.x, randomCoord.y);
 
-                
                 Transform newObstacle = Instantiate(obstaclePrefab[Random.Range(0, obstaclePrefab.Length)], obastaclePosition + Vector3.up * obstacleHeight / 100, Quaternion.identity) as Transform;
 
                 newObstacle.parent = mapHolder;
@@ -104,19 +128,14 @@ public class MapGenerator : MonoBehaviour
                 
                 obstacleRenderer.sharedMaterial = obstacleMaterial;
                 allOpenCoords.Remove(randomCoord);
-                
-
             }
             else
-        {
-            obstacleMap[randomCoord.x, randomCoord.y] = false;
-            currentObstacleCount--;
+            {
+                obstacleMap[randomCoord.x, randomCoord.y] = false;
+                currentObstacleCount--;
+            }
         }
-    }
         shuffledOpenTileCoords = new Queue<Coord>(Utility.ShuffleArray(allOpenCoords.ToArray(), currentMap.seed));
-
-
-       
 
         // Creating the navmesh mask
         Transform maskLeft = Instantiate(navmeshMaskPrefab, Vector3.left * (currentMap.mapSize.x + maxMapSize.x) / 4f * tileSize, Quaternion.identity) as Transform;
