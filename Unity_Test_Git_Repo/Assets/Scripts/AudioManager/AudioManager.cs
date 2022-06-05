@@ -96,16 +96,16 @@ public class AudioManager: MonoBehaviour
         {
             case AudioChannel.Master:
                 masterVolumePercent = volumePercent;
-                print("S-a modificat master volume" + masterVolumePercent);
+                //print("S-a modificat master volume" + masterVolumePercent);
                 break;
             case AudioChannel.Music:
                 musicVolumePercent = volumePercent;
-                print("S-a modificat music volume"  + musicVolumePercent);
+                //print("S-a modificat music volume"  + musicVolumePercent);
 
                 break;
             case AudioChannel.Sfx:
                 sfxVolumePercent = volumePercent;
-                print("S-a modificat sfx volume" + sfxVolumePercent);
+                //print("S-a modificat sfx volume" + sfxVolumePercent);
 
                 break;
         }
@@ -162,4 +162,15 @@ public class AudioManager: MonoBehaviour
             yield return null;
         }
     }
+    void OnLevelWasLoaded(int index)
+    {
+        if (playerT == null)
+        {
+            if (FindObjectOfType<Player>() != null)
+            {
+                playerT = FindObjectOfType<Player>().transform;
+            }
+        }
+    }
+
 }

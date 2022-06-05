@@ -2,13 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class Gun : MonoBehaviour
 {
     public enum FireMode { Auto, Burst, Single };
     public FireMode fireMode;
 
-    [SerializeField] private int projectilePerMag;
+    [SerializeField] public int projectilePerMag;
     [SerializeField] private float reloadTime = .3f;
 
     [Header("Effects")]
@@ -33,12 +32,14 @@ public class Gun : MonoBehaviour
     private float recoilAngle;
     private float recoilRotSmoothDampVelocity;
 
-    int projectilesRemainingInMag;
+    public int projectilesRemainingInMag;
     bool triggerReleasedSinceLastShot;
     bool isReloading;
     int shotsRemainingInBurst;
 
     MuzzleFlash muzzleFlash;
+
+
     private void Start()
     {
         muzzleFlash = GetComponent<MuzzleFlash>();
@@ -131,7 +132,7 @@ public class Gun : MonoBehaviour
             percent += Time.deltaTime + reloadSpeed;
             float interpolation = (-Mathf.Pow(percent, 2) + percent) * 4;
             float reloadAngle = Mathf.Lerp(0, maxReloadAngle, interpolation);
-            transform.localEulerAngles = initialRot + Vector3.left * reloadAngle;
+            transform.localEulerAngles = initialRot + Vector3.up * reloadAngle;
 
             yield return null;
         }

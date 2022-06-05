@@ -9,8 +9,9 @@ public class GunController : MonoBehaviour
     [SerializeField] private Gun startingGun;
     [SerializeField] private Gun[] playerWeapons;
 
-    Gun equippedGun;
+    public Gun equippedGun;
     int equippedGunIndex;
+
     public float GunHeight
     {
         get { return weaponHold.position.y; }
