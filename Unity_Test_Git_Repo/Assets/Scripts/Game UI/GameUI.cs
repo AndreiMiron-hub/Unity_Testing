@@ -9,12 +9,16 @@ public class GameUI : MonoBehaviour
     public Image fadePlane;
     public GameObject gameOverUI;
 
+    [Header("Wave Banner")]
     public RectTransform newWaveBanner;
     public Text newWaveTitle;
     public Text nextWaveEnemyCount;
 
     [Header("Health bar")]
     public RectTransform healthBar;
+
+    [Header("Boss Spawning")]
+    public RectTransform bossSpawningBanner;
 
     private Spawner spawner;
     private Player player;
@@ -30,6 +34,7 @@ public class GameUI : MonoBehaviour
     {
         spawner = FindObjectOfType<Spawner>();
         spawner.OnNewWave += OnNewWave;
+        spawner.OnBossSpawning += OnBossIsSpawning;
     }
     private void Update()
     {
@@ -44,9 +49,18 @@ public class GameUI : MonoBehaviour
     private void OnNewWave(int waveNumber)
     {
         newWaveTitle.text = $"Wave {waveNumber}";
-        nextWaveEnemyCount.text = $"Enemies: {spawner.waves[waveNumber - 1].enemyCount + 1}";
+        if (spawner.waves[waveNumber - 1].enemyCount > 500)
+        {
+            nextWaveEnemyCount.text = $"They keep coming";
+        }
+        else
+            nextWaveEnemyCount.text = $"Enemies: {spawner.waves[waveNumber - 1].enemyCount + 1}";
 
         StartCoroutine(AnimateNewWaveBanner());
+    }
+    private void OnBossIsSpawning()
+    {
+        StartCoroutine(AnimateBossSpawningBanner());
     }
 
     IEnumerator AnimateNewWaveBanner()
@@ -75,6 +89,34 @@ public class GameUI : MonoBehaviour
             yield return null;
         }
     }
+
+    IEnumerator AnimateBossSpawningBanner()
+    {
+        float speed = 2.5f;
+        float delayTime = 2f; // cat timp sta bannerul pe ecran
+        float animationPercent = 0;
+        int direction = 1;
+        float endDelayTime = Time.time + 1 / speed + delayTime;
+
+        while (animationPercent >= 0)
+        {
+            animationPercent += Time.deltaTime * speed * direction;
+
+            if (animationPercent >= 1)
+            {
+                animationPercent = 1;
+
+                if (Time.time > endDelayTime)
+                {
+                    direction = -1;
+                }
+            }
+
+            bossSpawningBanner.anchoredPosition = Vector2.up * Mathf.Lerp(400, 218, animationPercent);
+            yield return null;
+        }
+    }
+
 
     void OnGameOver()
     {

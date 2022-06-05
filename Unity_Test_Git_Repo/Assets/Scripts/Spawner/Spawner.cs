@@ -25,6 +25,7 @@ public class Spawner : MonoBehaviour
     bool isDisabled;
     private MapGenerator map;
     public event System.Action<int> OnNewWave;
+    public event System.Action OnBossSpawning;
 
     private void Start()
     {
@@ -49,7 +50,7 @@ public class Spawner : MonoBehaviour
             {
                 bossIsSpawned = true;
                 nextSpawnTime = Time.time + currentWave.timeBetweenSpawns;
-                SpawnBoss();
+                StartCoroutine("SpawnBoss");
             }
         }
         
@@ -77,30 +78,39 @@ public class Spawner : MonoBehaviour
 
         while (spawnTimer < spawnDelay)
         {
-            tileMat.color = Color.Lerp(initialColor, flashColor, Mathf.PingPong(spawnTimer * tileFlashSpeed, 1));
+            tileMat.color = Color.Lerp(Color.clear, flashColor, Mathf.PingPong(spawnTimer * tileFlashSpeed, 1));
             spawnTimer += Time.deltaTime;
             yield return null;
         }
+        tileMat.color = initialColor;
         if (!isDisabled)
         {
-            Enemy spawnedEnemy = Instantiate(currentWave.smallEnemy, randomTile.position + Vector3.up, Quaternion.identity) as Enemy;
+            int randomMob = Random.Range(0, currentWave.smallEnemy.Length);
+            Enemy spawnedEnemy = Instantiate(currentWave.smallEnemy[randomMob], randomTile.position + Vector3.up, Quaternion.identity) as Enemy;
             if (spawnedEnemy != null)
             {
-                spawnedEnemy.SetCharacteristics(currentWave.moveSpeed, currentWave.hitsToKillPlayer, currentWave.enemyHealth);
+                spawnedEnemy.SetCharacteristics(currentWave.moveSpeed[randomMob], currentWave.hitsToKillPlayer[randomMob], currentWave.enemyHealth[randomMob]);
                 spawnedEnemy.OnDeath += OnEnemyDeath;
             }
         }
     }
 
-    private void SpawnBoss()
+    IEnumerator SpawnBoss()
     {
         Vector3 mapCenter = map.GetTileFromPosition(Vector3.zero).position + Vector3.up;
-        Enemy spawnedEnemy = Instantiate(currentWave.bigEnemy, mapCenter + Vector3.up, Quaternion.identity) as Enemy;
+
+        if (OnBossSpawning!= null)
+        {
+            OnBossSpawning();
+            yield return new WaitForSeconds(3);
+        }
+
+        int randomBoss = Random.Range(0, currentWave.bigEnemy.Length);
+        Enemy spawnedEnemy = Instantiate(currentWave.bigEnemy[randomBoss], mapCenter + Vector3.up, Quaternion.identity) as Enemy;
         if (spawnedEnemy != null)
         {
-            spawnedEnemy.SetCharacteristics(currentWave.bossMoveSpeed, currentWave.bossDamage, currentWave.bossHealth);
+            spawnedEnemy.SetCharacteristics(currentWave.bossMoveSpeed[randomBoss], currentWave.bossHitsToKillsPlayer[randomBoss], currentWave.bossHealth[randomBoss]);
             spawnedEnemy.OnDeath += OnBossDeath;
-            
         }
     }
 
@@ -137,6 +147,8 @@ public class Spawner : MonoBehaviour
 
             enemiesRemainingToSpawn = currentWave.enemyCount;
             enemiesRemainingAlive = enemiesRemainingToSpawn;
+            bossIsSpawned = false;
+            bossStillAlive = true;
             if (OnNewWave != null)
             {
                 OnNewWave(currentWaveNumber);
@@ -156,20 +168,20 @@ public class Spawner : MonoBehaviour
     [System.Serializable]
     public class Wave
     {
-        public Enemy smallEnemy;
-        public Enemy bigEnemy;
+        public Enemy[] smallEnemy;
+        public Enemy[] bigEnemy;
 
         public int enemyCount;
         public float timeBetweenSpawns;
 
-        public float moveSpeed;
-        public int hitsToKillPlayer;
-        public float enemyHealth;
+        public float[] moveSpeed;
+        public int[] hitsToKillPlayer;
+        public float[] enemyHealth;
 
         // boss info
-        public float bossHealth;
-        public float bossMoveSpeed;
-        public int bossDamage; // hitsToKillPlayer
+        public float[] bossHealth;
+        public float[] bossMoveSpeed;
+        public int[] bossHitsToKillsPlayer; // hitsToKillPlayer
 
 
         //public Color skinColor;

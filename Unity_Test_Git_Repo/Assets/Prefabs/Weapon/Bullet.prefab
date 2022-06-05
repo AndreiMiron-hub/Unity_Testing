@@ -114,7 +114,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 384
   _speed: 20
-  _damage: 1
+  _damage: 50
   _lifeTime: 3
   _hitBox: 1.5
   trailColor: {r: 0.6792453, g: 0.6443839, b: 0.24670699, a: 0}

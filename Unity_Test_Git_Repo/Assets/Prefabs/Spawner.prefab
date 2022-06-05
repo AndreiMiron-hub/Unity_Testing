@@ -1,0 +1,148 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5433434306416899967
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5433434306416899964}
+  - component: {fileID: 5433434306416899965}
+  m_Layer: 0
+  m_Name: Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5433434306416899964
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5433434306416899967}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.95, z: 4.83}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5433434306416899965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5433434306416899967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b48a529efe20b0b4d9abe0cb5a4b4c79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeBetweenWaves: 5
+  waves:
+  - smallEnemy:
+    - {fileID: 6060341695052773031, guid: 78f94c5918ab32441b81a6918712e053, type: 3}
+    - {fileID: 6060341695052773031, guid: 47b41978aba272c47ae5f4a2f7179c61, type: 3}
+    bigEnemy:
+    - {fileID: 6060341695052773031, guid: fee0abca6f456114498e780119357ad2, type: 3}
+    enemyCount: 9
+    timeBetweenSpawns: 1
+    moveSpeed:
+    - 3
+    - 2
+    hitsToKillPlayer: 1400000010000000
+    enemyHealth:
+    - 50
+    - 70
+    bossHealth:
+    - 70
+    bossMoveSpeed:
+    - 3.5
+    bossHitsToKillsPlayer: 06000000
+  - smallEnemy:
+    - {fileID: 6060341695052773031, guid: 47b41978aba272c47ae5f4a2f7179c61, type: 3}
+    - {fileID: 6060341695052773031, guid: fee0abca6f456114498e780119357ad2, type: 3}
+    - {fileID: 1368549198096414513, guid: 415c1049b61b2a5479b871c6ddd4b2fd, type: 3}
+    bigEnemy:
+    - {fileID: 7558595678589479570, guid: 3ffe8ac9f1ef9984a9428440d1c31b9f, type: 3}
+    enemyCount: 19
+    timeBetweenSpawns: 1.5
+    moveSpeed:
+    - 4
+    - 4.2
+    - 4
+    hitsToKillPlayer: 100000000c0000000b000000
+    enemyHealth:
+    - 60
+    - 70
+    - 65
+    bossHealth:
+    - 100
+    bossMoveSpeed:
+    - 4.5
+    bossHitsToKillsPlayer: 06000000
+  - smallEnemy:
+    - {fileID: -176368014695740156, guid: 705458a9eac3ae740932e6aa33f3ca89, type: 3}
+    - {fileID: -176368014695740156, guid: 36c92d5180ecc094d835be9ca087d296, type: 3}
+    bigEnemy:
+    - {fileID: -7051891251044467834, guid: a9f09a8a284043a40ba7a2aacbc9e9a6, type: 3}
+    enemyCount: 29
+    timeBetweenSpawns: 1.5
+    moveSpeed:
+    - 3.5
+    - 4
+    hitsToKillPlayer: 0700000006000000
+    enemyHealth:
+    - 80
+    - 90
+    bossHealth:
+    - 120
+    bossMoveSpeed:
+    - 5
+    bossHitsToKillsPlayer: 04000000
+  - smallEnemy:
+    - {fileID: -176368014695740156, guid: 705458a9eac3ae740932e6aa33f3ca89, type: 3}
+    - {fileID: -176368014695740156, guid: 36c92d5180ecc094d835be9ca087d296, type: 3}
+    - {fileID: 6060341695052773031, guid: 78f94c5918ab32441b81a6918712e053, type: 3}
+    - {fileID: 6060341695052773031, guid: 47b41978aba272c47ae5f4a2f7179c61, type: 3}
+    - {fileID: 6060341695052773031, guid: fee0abca6f456114498e780119357ad2, type: 3}
+    - {fileID: 1368549198096414513, guid: 415c1049b61b2a5479b871c6ddd4b2fd, type: 3}
+    - {fileID: -7051891251044467834, guid: a9f09a8a284043a40ba7a2aacbc9e9a6, type: 3}
+    - {fileID: 7558595678589479570, guid: 3ffe8ac9f1ef9984a9428440d1c31b9f, type: 3}
+    - {fileID: 3958697348565882206, guid: 4a2995c2dfa5ee447bb99406df3fd57e, type: 3}
+    bigEnemy: []
+    enemyCount: 2147483647
+    timeBetweenSpawns: 3
+    moveSpeed:
+    - 4
+    - 4
+    - 4
+    - 4
+    - 4
+    - 4
+    - 4
+    - 4
+    - 4
+    hitsToKillPlayer: 140000000f000000140000000f0000000c0000000c000000050000000500000004000000
+    enemyHealth:
+    - 40
+    - 40
+    - 50
+    - 50
+    - 60
+    - 60
+    - 100
+    - 100
+    - 150
+    bossHealth: []
+    bossMoveSpeed: []
+    bossHitsToKillsPlayer: 
+  developerMode: 1
+  nextSpawnTime: 5
+  spawnDelay: 3
+  tileFlashSpeed: 3
