@@ -7,9 +7,13 @@ public class AudioManager: MonoBehaviour
 
     public enum AudioChannel { Master, Sfx, Music};
 
-    float masterVolumePercent = .2f;
-    float sfxVolumePercent = 1;
-    float musicVolumePercent = 1f;
+    //public float masterVolumePercent { get; private set; }
+    //public float sfxVolumePercent { get; private set; }
+    //public float musicVolumePercent { get; private set; }
+
+    public float masterVolumePercent = 1f;
+    public float sfxVolumePercent = 1f;
+    public float musicVolumePercent = 1f;
 
     public static AudioManager instance;
 
@@ -50,12 +54,16 @@ public class AudioManager: MonoBehaviour
             newSfx2DSource.transform.parent = transform;
             // end 2d sound create.
             audioListener = FindObjectOfType<AudioListener>().transform;
-            playerT = FindObjectOfType<Player>().transform;
-
+            
+            if(FindObjectOfType<Player>() != null)
+            { 
+                playerT = FindObjectOfType<Player>().transform;
+            }
 
             if (PlayerPrefs.GetFloat("master vol", masterVolumePercent) != 0)
             {
                 masterVolumePercent = PlayerPrefs.GetFloat("master vol", masterVolumePercent);
+
             }
             if (PlayerPrefs.GetFloat("sfx vol", sfxVolumePercent) != 0)
             {
@@ -66,9 +74,12 @@ public class AudioManager: MonoBehaviour
                 musicVolumePercent = PlayerPrefs.GetFloat("music vol", musicVolumePercent);
 
             }
+            //masterVolumePercent = PlayerPrefs.GetFloat("master vol", 1f);
+            //sfxVolumePercent = PlayerPrefs.GetFloat("sfx vol", 1f);
+            //musicVolumePercent = PlayerPrefs.GetFloat("music vol", 1f);
         }
 
-        
+
     }
 
     private void Update()
@@ -85,16 +96,16 @@ public class AudioManager: MonoBehaviour
         {
             case AudioChannel.Master:
                 masterVolumePercent = volumePercent;
-                print("S-a modificat master volume");
+                print("S-a modificat master volume" + masterVolumePercent);
                 break;
             case AudioChannel.Music:
                 musicVolumePercent = volumePercent;
-                print("S-a modificat music volume");
+                print("S-a modificat music volume"  + musicVolumePercent);
 
                 break;
             case AudioChannel.Sfx:
                 sfxVolumePercent = volumePercent;
-                print("S-a modificat sfx volume");
+                print("S-a modificat sfx volume" + sfxVolumePercent);
 
                 break;
         }
@@ -106,6 +117,8 @@ public class AudioManager: MonoBehaviour
         PlayerPrefs.SetFloat("master vol", masterVolumePercent);
         PlayerPrefs.SetFloat("sfx vol", sfxVolumePercent);
         PlayerPrefs.SetFloat("music vol", musicVolumePercent);
+        PlayerPrefs.Save();
+
     }
 
     public void PlayMusic(AudioClip clip, float fadeDuration = 1)
