@@ -11,7 +11,7 @@ public class Player : LivingEntity
     Camera viewCamera;
 
     private PlayerController controller;
-    private GunController gunController;
+    public GunController gunController;
 
     [SerializeField] private Transform crossHair;
     public Animator animatorPlayer;
@@ -85,6 +85,10 @@ public class Player : LivingEntity
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             gunController.EquipGun(2);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            gunController.EquipGun(3);
         }
 
     }
