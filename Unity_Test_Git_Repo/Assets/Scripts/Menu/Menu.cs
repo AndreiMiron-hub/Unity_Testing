@@ -34,6 +34,8 @@ public class Menu : MonoBehaviour
 
         SetFullScreen(isFullScreen);
     }
+
+
     public void Play()
     {
         SceneManager.LoadScene("Dev");

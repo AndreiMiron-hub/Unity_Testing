@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(PlayerController))]
 [RequireComponent(typeof(GunController))]
@@ -89,6 +90,11 @@ public class Player : LivingEntity
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             gunController.EquipGun(3);
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Cursor.visible = true;
+            SceneManager.LoadScene("Menu");
         }
 
     }
