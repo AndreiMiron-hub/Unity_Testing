@@ -48,6 +48,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
         {
             OnDeath();
         }
+        AudioManager.instance.PlaySound("Player Death", transform.position);
         animator.SetTrigger("Die");
         var destroyTime = 3f;
         GameObject.Destroy(gameObject, destroyTime);
