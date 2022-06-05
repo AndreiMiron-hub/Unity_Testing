@@ -89,14 +89,26 @@ public class Menu : MonoBehaviour
 
     public void SetMasterVolume()
     {
+        if (AudioManager.instance == null)
+        {
+            return;
+        }
         AudioManager.instance.SetVolume(volumeSliders[0].value, AudioManager.AudioChannel.Master);
     }
     public void SetSfxVolume()
     {
+        if (AudioManager.instance == null)
+        {
+            return;
+        }
         AudioManager.instance.SetVolume(volumeSliders[1].value, AudioManager.AudioChannel.Music);
     }
     public void SetMusicVolume()
     {
+        if (AudioManager.instance == null)
+        {
+            return;
+        }
         AudioManager.instance.SetVolume(volumeSliders[2].value, AudioManager.AudioChannel.Sfx);
     }
 
