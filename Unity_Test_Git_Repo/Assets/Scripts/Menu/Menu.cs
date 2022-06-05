@@ -87,17 +87,17 @@ public class Menu : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    public void SetMasterVolume(float value)
+    public void SetMasterVolume()
     {
-        AudioManager.instance.SetVolume(value, AudioManager.AudioChannel.Master);
+        AudioManager.instance.SetVolume(volumeSliders[0].value, AudioManager.AudioChannel.Master);
     }
-    public void SetSfxVolume(float value)
+    public void SetSfxVolume()
     {
-        AudioManager.instance.SetVolume(value, AudioManager.AudioChannel.Music);
+        AudioManager.instance.SetVolume(volumeSliders[1].value, AudioManager.AudioChannel.Music);
     }
-    public void SetMusicVolume(float value)
+    public void SetMusicVolume()
     {
-        AudioManager.instance.SetVolume(value, AudioManager.AudioChannel.Sfx);
+        AudioManager.instance.SetVolume(volumeSliders[2].value, AudioManager.AudioChannel.Sfx);
     }
 
 }

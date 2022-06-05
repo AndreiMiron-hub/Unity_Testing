@@ -7,9 +7,13 @@ public class AudioManager: MonoBehaviour
 
     public enum AudioChannel { Master, Sfx, Music};
 
-    public float masterVolumePercent { get; private set; }
-    public float sfxVolumePercent { get; private set; }
-    public float musicVolumePercent { get; private set; }
+    //public float masterVolumePercent { get; private set; }
+    //public float sfxVolumePercent { get; private set; }
+    //public float musicVolumePercent { get; private set; }
+
+    public float masterVolumePercent = 1f;
+    public float sfxVolumePercent = 1f;
+    public float musicVolumePercent = 1f;
 
     public static AudioManager instance;
 
@@ -56,26 +60,26 @@ public class AudioManager: MonoBehaviour
                 playerT = FindObjectOfType<Player>().transform;
             }
 
-            //if (PlayerPrefs.GetFloat("master vol", masterVolumePercent) != 0)
-            //{
-            //    masterVolumePercent = PlayerPrefs.GetFloat("master vol", 1);
+            if (PlayerPrefs.GetFloat("master vol", masterVolumePercent) != 0)
+            {
+                masterVolumePercent = PlayerPrefs.GetFloat("master vol", masterVolumePercent);
 
-            //}
-            //if (PlayerPrefs.GetFloat("sfx vol", sfxVolumePercent) != 0)
-            //{
-            //    sfxVolumePercent = PlayerPrefs.GetFloat("sfx vol", 1);
-            //}
-            //if (PlayerPrefs.GetFloat("music vol", musicVolumePercent) != 0)
-            //{
-            //    musicVolumePercent = PlayerPrefs.GetFloat("music vol", 1);
+            }
+            if (PlayerPrefs.GetFloat("sfx vol", sfxVolumePercent) != 0)
+            {
+                sfxVolumePercent = PlayerPrefs.GetFloat("sfx vol", sfxVolumePercent);
+            }
+            if (PlayerPrefs.GetFloat("music vol", musicVolumePercent) != 0)
+            {
+                musicVolumePercent = PlayerPrefs.GetFloat("music vol", musicVolumePercent);
 
-            //}
-            masterVolumePercent = PlayerPrefs.GetFloat("master vol", 1);
-            sfxVolumePercent = PlayerPrefs.GetFloat("sfx vol", 1);
-            musicVolumePercent = PlayerPrefs.GetFloat("music vol", 1);
+            }
+            //masterVolumePercent = PlayerPrefs.GetFloat("master vol", 1f);
+            //sfxVolumePercent = PlayerPrefs.GetFloat("sfx vol", 1f);
+            //musicVolumePercent = PlayerPrefs.GetFloat("music vol", 1f);
         }
 
-        
+
     }
 
     private void Update()
@@ -92,16 +96,16 @@ public class AudioManager: MonoBehaviour
         {
             case AudioChannel.Master:
                 masterVolumePercent = volumePercent;
-                print("S-a modificat master volume");
+                print("S-a modificat master volume" + masterVolumePercent);
                 break;
             case AudioChannel.Music:
                 musicVolumePercent = volumePercent;
-                print("S-a modificat music volume");
+                print("S-a modificat music volume"  + musicVolumePercent);
 
                 break;
             case AudioChannel.Sfx:
                 sfxVolumePercent = volumePercent;
-                print("S-a modificat sfx volume");
+                print("S-a modificat sfx volume" + sfxVolumePercent);
 
                 break;
         }
