@@ -1411,8 +1411,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startingHealth: 5
-  deathEffect: {fileID: 1893300492851036040, guid: 1639bfba418f1cc4a9223b1f9eb98274, type: 3}
+  deathEffect: {fileID: 1893300492851036040, guid: 63166a679cd492842bb28da850abbcda, type: 3}
   hitEffect: {fileID: 1893300492851036040, guid: cb98a2f03e0344842a7e7579a950a9f6, type: 3}
+  attackDistanceThreshold: 0.5
+  timeBetweenAtacks: 1
 --- !u!1 &158312
 GameObject:
   m_ObjectHideFlags: 0

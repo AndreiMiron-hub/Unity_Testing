@@ -12,12 +12,15 @@ public class LivingEntity : MonoBehaviour, IDamageable
     private Collider _collider;
 
     public event System.Action OnDeath;
+    bool hasHitAnimation = false;
 
     protected virtual void Start()
     {
         animator = GetComponent<Animator>();
         _collider = GetComponent<Collider>();
         _health = _startingHealth;
+
+        //hasHitAnimation = ContainsParam(animator, "Hit");
     }
     public virtual void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection)// folositoare pt a cunoaste unde a lovit 
     {
@@ -25,13 +28,17 @@ public class LivingEntity : MonoBehaviour, IDamageable
     }
     public virtual void TakeDamage(float damage)
     {
+        //if (hasHitAnimation)
+        //{
+        //    animator.SetTrigger("Hit");
+        //}
         _health -= damage;
         if (_health <= 0 && !_dead)
         {
             Die();
         }
     }
-
+    
     [ContextMenu("Suicide")]
     protected void Die()
     {
@@ -46,5 +53,14 @@ public class LivingEntity : MonoBehaviour, IDamageable
         GameObject.Destroy(gameObject, destroyTime);
     }
 
+
+    public bool ContainsParam(Animator _Anim, string _ParamName)
+    {
+        foreach (AnimatorControllerParameter param in _Anim.parameters)
+        {
+            if (param.name == _ParamName) return true;
+        }
+        return false;
+    }
 
 }

@@ -17,8 +17,8 @@ public class Enemy : LivingEntity
     public ParticleSystem deathEffect;
     public ParticleSystem hitEffect;
 
-    float attackDistanceThreshold = .5f;
-    float timeBetweenAtacks = 1;
+    public float attackDistanceThreshold = .5f;
+    public float timeBetweenAtacks = 1;
     float nextAtackTime;
     float damage = 1;
 
@@ -59,7 +59,6 @@ public class Enemy : LivingEntity
         }
         else
             Idle();
-
     }
 
     // Update is called once per frame
