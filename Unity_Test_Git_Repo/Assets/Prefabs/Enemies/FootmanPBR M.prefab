@@ -629,7 +629,7 @@ MonoBehaviour:
   _startingHealth: 5
   deathEffect: {fileID: 1893300492851036040, guid: 63166a679cd492842bb28da850abbcda, type: 3}
   hitEffect: {fileID: 1893300492851036040, guid: cb98a2f03e0344842a7e7579a950a9f6, type: 3}
-  attackDistanceThreshold: 0.5
+  attackDistanceThreshold: 1.6
   timeBetweenAtacks: 1
 --- !u!1 &1849239188663008
 GameObject:
